@@ -47,6 +47,8 @@ def main():
     out_imgs = np.empty((sample_num, img_size, img_size, 3), dtype=np.uint8)
     valid_sample_num = 0
 
+    print(f"root_path = {root_path}")
+
     for i in tqdm(range(sample_num)):
         if face_score[i] < min_score:
             continue
@@ -62,7 +64,9 @@ def main():
 
         out_genders.append(int(gender[i]))
         out_ages.append(age[i])
-        img = cv2.imread(os.path.join(root_path + str(full_path[i][0])))
+        img_path = os.path.join(root_path + str(full_path[i][0]))
+        print(f"Read {img_path}")
+        img = cv2.imread(img_path)
         out_imgs[valid_sample_num] = cv2.resize(img, (img_size, img_size))
         valid_sample_num += 1
 
