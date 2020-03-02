@@ -1,8 +1,11 @@
+import argparse
+import os
+
 import numpy as np
 import cv2
 import scipy.io
-import argparse
 from tqdm import tqdm
+
 from utils import get_meta
 
 
@@ -15,6 +18,7 @@ def get_args():
     parser.add_argument("--db", type=str, default="wiki",
                         help="dataset; wiki or imdb")
     parser.add_argument("--db-path", help="Path to the db dir if needed")
+    parser.add_argument("--output", help="Output mat path")
     parser.add_argument("--img_size", type=int, default=32,
                         help="output image size")
     parser.add_argument("--min_score", type=float, default=1.0,
@@ -34,7 +38,11 @@ def main():
         root_path = args.db_path
     else:
         root_path = "data/{}_crop/".format(db)
-    mat_path = root_path + "{}.mat".format(db)
+    if args.output:
+        mat_path = args.output
+    else:
+        mat_path = os.path.join(root_path, "{}.mat".format(db))
+
     full_path, dob, gender, photo_taken, face_score, second_face_score, age = get_meta(mat_path, db)
 
     out_genders = []
