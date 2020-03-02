@@ -62,7 +62,7 @@ def main():
 
         out_genders.append(int(gender[i]))
         out_ages.append(age[i])
-        img = cv2.imread(root_path + str(full_path[i][0]))
+        img = cv2.imread(os.path.join(root_path + str(full_path[i][0])))
         out_imgs[valid_sample_num] = cv2.resize(img, (img_size, img_size))
         valid_sample_num += 1
 
