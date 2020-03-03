@@ -1,6 +1,7 @@
 import argparse
 import os
 
+import h5py
 import numpy as np
 import cv2
 import scipy.io
@@ -20,6 +21,8 @@ def get_args():
     parser.add_argument("--db-path", help="Path to the db dir if needed")
     parser.add_argument("--img_size", type=int, default=32,
                         help="output image size")
+    parser.add_argument("--h5", action='store_true',
+                        help="Save as hdf5 format")
     parser.add_argument("--min_score", type=float, default=1.0,
                         help="minimum face_score")
     args = parser.parse_args()
@@ -72,9 +75,23 @@ def main():
 
     print(f"Saving {len(out_imgs)} items")
 
-    output = {"image": out_imgs[:valid_sample_num], "gender": np.array(out_genders), "age": np.array(out_ages),
-              "db": db, "img_size": img_size, "min_score": min_score}
-    scipy.io.savemat(output_path, output, do_compression=True)
+    if args.h5:
+        base, ext = os.path.splitext(output_path)
+        output_path = base + '.h5'
+        h5 = h5py.File(output_path, mode='w')
+        h5.create_dataset('image', data=out_imgs[:valid_sample_num])
+        h5.create_dataset('gender', data=np.array(out_genders))
+        h5.create_dataset('age', data=np.array(out_ages))
+        h5.attrs['db'] = db
+        h5.attrs['img_size'] = img_size
+        h5.attrs['min_score'] = min_score
+        h5.close()
+
+        print(f"Data has been written to {output_path}.")
+    else:
+        output = {"image": out_imgs[:valid_sample_num], "gender": np.array(out_genders), "age": np.array(out_ages),
+                  "db": db, "img_size": img_size, "min_score": min_score}
+        scipy.io.savemat(output_path, output, do_compression=True)
 
 
 if __name__ == '__main__':
