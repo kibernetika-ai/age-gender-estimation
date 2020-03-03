@@ -19,7 +19,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--input", "-i", type=str, required=True,
-                        help="path to input database mat file")
+                        help="path to input database mat or h5 file")
     parser.add_argument("--batch_size", type=int, default=32,
                         help="batch size")
     parser.add_argument("--nb_epochs", type=int, default=30,

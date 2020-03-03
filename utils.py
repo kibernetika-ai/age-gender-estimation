@@ -1,6 +1,8 @@
-from scipy.io import loadmat
 from datetime import datetime
 import os
+
+import h5py
+from scipy.io import loadmat
 
 
 def calc_age(taken, dob):
@@ -27,6 +29,18 @@ def get_meta(mat_path, db):
 
 
 def load_data(mat_path):
+    base, ext = os.path.splitext(mat_path)
+    if ext in {'.h5', '.hdf5', '.h5py'}:
+        h5 = h5py.File(mat_path, 'r')
+        image = h5['image']
+        gender = h5['gender']
+        age = h5['age']
+
+        db = h5.attrs['db']
+        img_size = h5.attrs['img_size']
+        min_score = h5.attrs['min_score']
+        return image, gender, age, db, img_size, min_score
+
     d = loadmat(mat_path)
 
     return d["image"], d["gender"][0], d["age"][0], d["db"][0], d["img_size"][0, 0], d["min_score"][0, 0]
