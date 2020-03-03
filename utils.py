@@ -32,9 +32,9 @@ def load_data(mat_path):
     base, ext = os.path.splitext(mat_path)
     if ext in {'.h5', '.hdf5', '.h5py'}:
         h5 = h5py.File(mat_path, 'r')
-        image = h5['image']
-        gender = h5['gender']
-        age = h5['age']
+        image = h5['image'].value
+        gender = h5['gender'].value
+        age = h5['age'].value
 
         db = h5.attrs['db']
         img_size = h5.attrs['img_size']
