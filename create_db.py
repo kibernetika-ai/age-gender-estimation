@@ -70,9 +70,11 @@ def main():
         out_imgs[valid_sample_num] = cv2.resize(img, (img_size, img_size))
         valid_sample_num += 1
 
+    print(f"Saving {len(out_imgs)} items")
+
     output = {"image": out_imgs[:valid_sample_num], "gender": np.array(out_genders), "age": np.array(out_ages),
               "db": db, "img_size": img_size, "min_score": min_score}
-    scipy.io.savemat(output_path, output)
+    scipy.io.savemat(output_path, output, do_compression=True)
 
 
 if __name__ == '__main__':
