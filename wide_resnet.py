@@ -18,9 +18,9 @@ class WideResNet:
     def __init__(self, image_size, depth=16, k=8):
         self._depth = depth
         self._k = k
-        self._dropout_probability = 0.5
-        self._weight_decay = 0.01
-        self._use_bias = True
+        self._dropout_probability = 0
+        self._weight_decay = 0.0005
+        self._use_bias = False
         self._weight_init = "he_normal"
 
         if K.image_data_format() == "channels_first":
