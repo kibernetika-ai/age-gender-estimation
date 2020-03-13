@@ -22,6 +22,7 @@ class WideResNet:
         self._weight_decay = 0.0005
         self._use_bias = False
         self._weight_init = "he_normal"
+        self._image_size = image_size
 
         if K.image_data_format() == "channels_first":
             logging.debug("image_dim_ordering = 'th'")
@@ -112,7 +113,12 @@ class WideResNet:
 
         inputs = Input(shape=self._input_shape)
 
-        n_stages = [16, 16 * self._k, 32 * self._k, 64 * self._k]
+        n_stages = [
+            self._image_size // 4,
+            self._image_size // 4 * self._k,
+            self._image_size // 2 * self._k,
+            self._image_size * self._k
+        ]
 
         conv1 = Conv2D(filters=n_stages[0], kernel_size=(3, 3),
                               strides=(1, 1),
